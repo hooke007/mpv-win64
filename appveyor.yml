@@ -7,7 +7,7 @@ install:
 
 before_deploy:
   - set MSYSTEM=MINGW64
-  - C:\msys64\usr\bin\bash -lc 'cd /c/projects/msys2-packages/ffmpeg-custom; makepkg'
+  - C:\msys64\usr\bin\bash -lc 'cd /c/projects/msys2-packages/ffmpeg-custom; sed -i 's/$(AR)/ar/' ffbuild/library.mak; makepkg'
   - ps: Get-ChildItem C:\projects\msys2-packages\ffmpeg-custom\*pkg*.xz | % { Push-AppveyorArtifact $_.FullName -FileName $_.Name }
 
 deploy:
