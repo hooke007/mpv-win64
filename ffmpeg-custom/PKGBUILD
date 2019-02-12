@@ -54,6 +54,7 @@ build() {
 
   unset CFLAGS
   cd "${srcdir}/ffmpeg-$pkgver/"
+  sed -i 's/$(AR)/ar/' ffbuild/library.mak  # cmd hack
   ./configure prefix=/usr --extra-cflags="-I${TMP}/include -I${TMP}/include/opus ${FLAGS}" \
     --extra-ldflags="-L${TMP}/lib ${LDFLAGS}" --target-os=mingw32 --arch=x86_64 \
     --disable-debug --disable-stripping --disable-shared --disable-doc \
