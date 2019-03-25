@@ -2,7 +2,7 @@
 
 pkgname=ffmpeg-custom
 pkgver=4.1.2
-pkgrel=1
+pkgrel=2
 pkgdesc="Complete and free Internet live audio and video solution"
 _zlibver=1.2.11
 _lamever=3.100
@@ -54,7 +54,6 @@ build() {
 
   unset CFLAGS
   cd "${srcdir}/ffmpeg-$pkgver/"
-  sed -i 's/$(AR)/ar/' ffbuild/library.mak  # cmd hack
   ./configure prefix=/usr --extra-cflags="-I${TMP}/include -I${TMP}/include/opus ${FLAGS}" \
     --extra-ldflags="-L${TMP}/lib ${LDFLAGS}" --target-os=mingw32 --arch=x86_64 \
     --disable-debug --disable-stripping --disable-shared --disable-doc \
