@@ -1,7 +1,7 @@
 # Maintainer: nyfair <nyfair2012@gmail.com>
 
 pkgname=ffmpeg-custom
-pkgver=4.1.1
+pkgver=4.1.2
 pkgrel=1
 pkgdesc="Complete and free Internet live audio and video solution"
 _zlibver=1.2.11
