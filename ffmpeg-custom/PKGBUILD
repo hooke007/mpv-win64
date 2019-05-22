@@ -24,13 +24,15 @@ md5sums=('SKIP' 'SKIP' 'SKIP' 'SKIP' 'SKIP' 'SKIP')
 build() {
   TMP="${srcdir}/tmp"
   mkdir -p ${TMP}
-  FLAGS="-march=core2 -O3 -pipe -ffat-lto-objects"
+  FLAGS="-march=core2 -O3 -pipe -stdlib=libc++"
   export CFLAGS=${FLAGS}
   export CXXFLAGS=${FLAGS}
   export PKG_CONFIG_PATH=${TMP}/lib/pkgconfig
+  export CC=clang
+  export CXX=clang++
 
   cd "${srcdir}/zlib-$_zlibver/"
-  CC=gcc ./configure --prefix=${TMP} --static
+  ./configure --prefix=${TMP} --static
   make install
 
   HOST=x86_64-w64-mingw32
@@ -54,7 +56,7 @@ build() {
 
   unset CFLAGS
   cd "${srcdir}/ffmpeg-$pkgver/"
-  ./configure prefix=/usr --extra-cflags="-I${TMP}/include -I${TMP}/include/opus ${FLAGS}" \
+  ./configure --cc=clang prefix=/usr --extra-cflags="-I${TMP}/include -I${TMP}/include/opus ${FLAGS}" \
     --extra-ldflags="-L${TMP}/lib ${LDFLAGS}" --target-os=mingw32 --arch=x86_64 \
     --disable-debug --disable-stripping --disable-shared --disable-doc \
     --enable-gpl --enable-version3 --enable-nonfree \
