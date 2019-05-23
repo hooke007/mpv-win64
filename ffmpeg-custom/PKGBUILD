@@ -8,7 +8,7 @@ _zlibver=1.2.11
 _lamever=3.100
 _oggver=1.3.3
 _vorbisver=1.3.6
-_opusver=1.3
+_opusver=1.3.1
 arch=('x86_64')
 url="http://ffmpeg.org"
 provides=('ffmpeg')
@@ -35,23 +35,20 @@ build() {
   ./configure --prefix=${TMP} --static
   make install
 
-  HOST=x86_64-w64-mingw32
-  CHOST="--build=$HOST --host=$HOST --target=$HOST"
-
   cd "${srcdir}/lame-$_lamever/"
-  ./configure ${CHOST} prefix=${TMP} --disable-shared --disable-frontend
+  ./configure prefix=${TMP} --disable-shared --disable-frontend
   CFLAGS="-msse2 ${CFLAGS}" make install
 
   cd "${srcdir}/libogg-$_oggver/"
-  ./configure ${CHOST} prefix=${TMP} --disable-shared
+  ./configure prefix=${TMP} --disable-shared
   make install
 
   cd "${srcdir}/vorbis_aotuv-beta6.03-2018"
-  ./configure ${CHOST} prefix=${TMP} --disable-shared --disable-docs --disable-examples
+  ./configure prefix=${TMP} --disable-shared --disable-docs --disable-examples
   CFLAGS="-I${TMP}/include ${CFLAGS}" LDFLAGS="-L${TMP}/lib ${LDFLAGS}" make install
 
   cd "${srcdir}/opus-$_opusver/"
-  ./configure ${CHOST} prefix=${TMP} --disable-shared --disable-doc --disable-extra-programs
+  ./configure prefix=${TMP} --disable-shared --disable-doc --disable-extra-programs
   make install
 
   unset CFLAGS
