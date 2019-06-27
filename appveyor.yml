@@ -9,8 +9,6 @@ before_deploy:
   - set MSYSTEM=MINGW64
   - C:\msys64\usr\bin\bash -lc 'export PATH=/m64-91/bin:$PATH; pacman -S yasm --noconfirm; cd /c/projects/msys2-packages/ffmpeg-custom; makepkg'
   - ps: Get-ChildItem C:\projects\msys2-packages\ffmpeg-custom\*pkg*.xz | % { Push-AppveyorArtifact $_.FullName -FileName $_.Name }
-  - 7z a dev.7z C:\projects\msys2-packages\ffmpeg-custom\src\tmp\*
-  - appveyor PushArtifact dev.7z
 
 deploy:
   artifact: /.*\.xz/
