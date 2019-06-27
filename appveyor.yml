@@ -1,14 +1,16 @@
 image: Visual Studio 2017
 
 install:
-  - curl "http://downloads.sourceforge.net/libportable/mingw8.3.1-clang-win64_32.7z" -L > mingw64.7z
+  - curl "http://msystem.waw.pl/x265/mingw-gcc91-20190503.7z" -L > mingw64.7z
   - rd /s /q C:\msys64\mingw64
   - 7z x mingw64.7z -oC:\msys64
 
 before_deploy:
   - set MSYSTEM=MINGW64
-  - C:\msys64\usr\bin\bash -lc 'export PATH=/mingw64/clang/bin:$PATH; pacman -S yasm --noconfirm; cd /c/projects/msys2-packages/ffmpeg-custom; makepkg'
+  - C:\msys64\usr\bin\bash -lc 'export PATH=/m64-91/bin:$PATH; pacman -S yasm --noconfirm; cd /c/projects/msys2-packages/ffmpeg-custom; makepkg'
   - ps: Get-ChildItem C:\projects\msys2-packages\ffmpeg-custom\*pkg*.xz | % { Push-AppveyorArtifact $_.FullName -FileName $_.Name }
+  - 7z a dev.7z C:\projects\msys2-packages\ffmpeg-custom\src\tmp\*
+  - appveyor PushArtifact dev.7z
 
 deploy:
   artifact: /.*\.xz/
