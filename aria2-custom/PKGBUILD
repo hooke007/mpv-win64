@@ -1,0 +1,77 @@
+# Maintainer: nyfair <nyfair2012@gmail.com>
+pkgname=aria2-custom
+pkgver=1.34.1
+pkgrel=1
+pkgdesc="A multi-protocol & multi-source, cross platform download utility"
+_zlibver=1.2.11
+_expatver=2.2.7
+_sqlitever=3290000
+_opensslver=1.1.1c
+_libssh2ver=1.9.0
+arch=('x86_64')
+url="https://aria2.github.io/"
+license=('GPL2')
+source=("https://zlib.net/current/zlib-$_zlibver.tar.gz"
+        "https://github.com/libexpat/libexpat/releases/download/R_${_expatver//./_}/expat-$_expatver.tar.xz"
+        "https://www.sqlite.org/2019/sqlite-autoconf-$_sqlitever.tar.gz"
+        "https://www.openssl.org/source/openssl-$_opensslver.tar.gz"
+        "http://libssh2.org/download/libssh2-$_libssh2ver.tar.gz")
+md5sums=('SKIP' 'SKIP' 'SKIP' 'SKIP' 'SKIP')
+
+build() {
+  TMP="${srcdir}/tmp"
+  mkdir -p ${TMP}
+  FLAGS="-march=core2 -O2"
+  export CFLAGS="-I${TMP}/include ${FLAGS}"
+  export CXXFLAGS="-I${TMP}/include ${FLAGS}"
+  export LDFLAGS="-L${TMP}/lib -Wl,--gc-sections,--build-id=none ${LDFLAGS}"
+  export PKG_CONFIG_PATH=${TMP}/lib/pkgconfig
+
+  cd "${srcdir}/zlib-$_zlibver/"
+  ./configure --prefix=${TMP} --static
+  make install
+
+  cd "${srcdir}/expat-$_expatver/"
+  ./configure --prefix=${TMP} --disable-shared --enable-static
+  make install
+
+  cd "${srcdir}/sqlite-autoconf-$_sqlitever/"
+  ./configure --prefix=${TMP} --disable-shared --enable-static
+  make install
+
+  cd "${srcdir}/openssl-$_opensslver/"
+  ./Configure mingw64 --prefix=${TMP} -static
+  make
+  make install
+
+  cd "${srcdir}/libssh2-$_libssh2ver/"
+  ./configure --prefix=${TMP} --disable-shared --enable-static LIBS="-lws2_32"
+  make install
+}
+
+package() {
+  curl -OL https://github.com/aria2/aria2/archive/master.zip
+  bsdtar -xf master.zip
+  cd aria2-master
+  patch -p1 -i ../../aria2.patch
+  autoreconf -ifv
+  ./configure \
+    --prefix=/usr \
+    --host=x86_64-w64-mingw32 \
+    --without-included-gettext \
+    --disable-nls \
+    --without-gnutls \
+    --without-wintls \
+    --with-openssl \
+    --with-sqlite3 \
+    --without-libxml2 \
+    --with-libexpat \
+    --with-libz \
+    --without-libgmp \
+    --with-libssh2 \
+    --without-libgcrypt \
+    --without-libnettle \
+    ARIA2_STATIC=yes
+  make DESTDIR="${pkgdir}" install
+  rm -rf ${pkgdir}/usr/share
+}
