@@ -2,13 +2,18 @@ image: Visual Studio 2017
 
 install:
   - curl "http://msystem.waw.pl/x265/mingw-gcc91-20190503.7z" -L > mingw64.7z
-  - rd /s /q C:\msys64\mingw64
   - 7z x mingw64.7z -oC:\msys64
 
 before_deploy:
   - set MSYSTEM=MINGW64
-  - C:\msys64\usr\bin\bash -lc 'export PATH=/m64-91/bin:$PATH; pacman -Sy yasm --noconfirm; cd /c/projects/msys2-packages/ffmpeg-custom; makepkg'
+  - rd /s /q C:\msys64\mingw64
+  - C:\msys64\usr\bin\bash -lc 'pacman -Sy yasm --noconfirm; cd /c/projects/msys2-packages/ffmpeg-custom; PATH=/m64-91/bin:$PATH makepkg'
   - ps: Get-ChildItem C:\projects\msys2-packages\ffmpeg-custom\*pkg*.xz | % { Push-AppveyorArtifact $_.FullName -FileName $_.Name }
+
+  - set MSYSTEM=MSYS2
+  - C:\msys64\usr\bin\bash -lc 'cd /c/projects/msys2-packages/aria2-custom; PATH=/m64-91/bin:$PATH makepkg;'
+  - 7z a aria2c.7z C:\projects\msys2-packages\aria2-custom\src\aria2-master\src\aria2c.exe
+  - appveyor PushArtifact aria2c.7z
 
 deploy:
   artifact: /.*\.xz/
