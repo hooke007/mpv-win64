@@ -21,14 +21,14 @@ build() {
   export LDFLAGS="-L${TMP}/lib ${LDFLAGS}"
   export PKG_CONFIG_PATH=${TMP}/lib/pkgconfig
 
-  # cd "${srcdir}/zlib-$_zlibver/"
-  # CC=gcc ./configure --prefix=${TMP} --static
-  # make install
+  cd "${srcdir}/zlib-$_zlibver/"
+  CC=gcc ./configure --prefix=${TMP} --static
+  make install
 }
 
 package() {
   cd "${srcdir}/aria2-$pkgver/"
-  # patch -p1 -i ../../aria2.patch
+  patch -p1 -i ../../aria2.patch
   # autoreconf -ifv
   ./configure \
     --host=x86_64-w64-mingw32 \
@@ -39,6 +39,8 @@ package() {
     --without-libgmp \
     --without-libgcrypt \
     --without-libnettle \
+    --disable-bittorrent \
+    --disable-metalink \
     ARIA2_STATIC=yes
   make
   strip src/aria2c.exe
