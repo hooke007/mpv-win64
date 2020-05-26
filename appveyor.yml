@@ -1,4 +1,4 @@
-image: Visual Studio 2017
+image: Visual Studio 2019
 
 environment:
   matrix:
@@ -6,13 +6,12 @@ environment:
     - toy: aria2
 
 install:
-  - curl "http://msystem.waw.pl/x265/mingw-gcc92-20191116.7z" -L > mingw64.7z
+  - curl "http://msystem.waw.pl/x265/mingw-gcc101-20200517.7z" -L > mingw64.7z
   - 7z x mingw64.7z -oC:\msys64
   - rd /s /q C:\msys64\mingw64
-  - move C:\msys64\m64-92 C:\msys64\mingw64
+  - move C:\msys64\m64-101 C:\msys64\mingw64
 
 before_deploy:
-  - set PATH=C:\Python37-x64;C:\Python37-x64\Scripts;%PATH%
   - set MSYSTEM=MINGW64
   - C:\msys64\usr\bin\bash -lc 'pacman -Sy nasm --noconfirm'
   - C:\msys64\usr\bin\bash -lc 'pacman -Rdd binutils isl mpc msys2-runtime-devel msys2-w32api-headers msys2-w32api-runtime windows-default-manifest gcc gcc-fortran --noconfirm'
