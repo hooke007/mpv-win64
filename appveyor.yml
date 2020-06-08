@@ -16,7 +16,7 @@ before_deploy:
   - C:\msys64\usr\bin\bash -lc 'pacman -Sy nasm --noconfirm'
   - C:\msys64\usr\bin\bash -lc 'pacman -Rdd binutils isl mpc msys2-runtime-devel msys2-w32api-headers msys2-w32api-runtime windows-default-manifest gcc gcc-fortran --noconfirm'
   - C:\msys64\usr\bin\bash -lc 'cd /c/projects/msys2-packages/%toy%-custom; makepkg'
-  - ps: Get-ChildItem C:\projects\msys2-packages\ffmpeg-custom\*pkg*.xz | % { Push-AppveyorArtifact $_.FullName -FileName $_.Name }
+  - ps: Get-ChildItem C:\projects\msys2-packages\ffmpeg-custom\*pkg*.* | % { Push-AppveyorArtifact $_.FullName -FileName $_.Name }
   - if %toy%==aria2 7z a aria2c.7z C:\projects\msys2-packages\aria2-custom\src\aria2*\src\aria2c.exe && appveyor PushArtifact aria2c.7z
 
 deploy:

@@ -14,7 +14,7 @@ md5sums=('SKIP' 'SKIP')
 build() {
   TMP="${srcdir}/tmp"
   mkdir -p ${TMP}
-  FLAGS="-march=core2 -O3 -pipe -ffat-lto-objects"
+  FLAGS="-O3 -pipe -ffat-lto-objects"
   export CFLAGS=${FLAGS}
   export CXXFLAGS=${FLAGS}
   export CPPLAGS="-I${TMP}/include"
