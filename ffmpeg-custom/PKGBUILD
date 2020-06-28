@@ -1,6 +1,6 @@
 # Maintainer: nyfair <nyfair2012@gmail.com>
 pkgname=(ffmpeg-static ffmpeg-shared)
-pkgver=4.2.3
+pkgver=4.3
 pkgrel=1
 pkgdesc="Complete and free Internet live audio and video solution"
 _zlibver=1.2.11
