@@ -1,5 +1,5 @@
 # Maintainer: nyfair <nyfair2012@gmail.com>
-pkgname=aria2-custom
+pkgname=aria2
 pkgver=1.35.0
 pkgrel=1
 pkgdesc="A multi-protocol & multi-source, cross platform download utility"
@@ -43,5 +43,6 @@ package() {
     --disable-metalink \
     ARIA2_STATIC=yes
   make
-  strip src/aria2c.exe
+  mkdir -p ${pkgdir}/usr/bin
+  mv src/aria2c.exe ${pkgdir}/usr/bin/
 }
