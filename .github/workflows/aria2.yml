@@ -20,7 +20,6 @@ jobs:
     - name: Prepare
       run: |
         git config --global core.autocrlf false
-        C:\msys64\usr\bin\bash -lc "sed -i 's/-O2/-O3 -flto/g' /etc/makepkg.conf"
         C:\msys64\usr\bin\bash -lc "sed -i 's/.tar.zst/.tar.xz/' /etc/makepkg.conf"
         curl -OL https://github.com/nyfair/MSYS2-packages/releases/download/dev/zlib-dev-1.2.11-1-x86_64.pkg.tar.zst
         C:\msys64\usr\bin\bash -lc "pacman -S /d/a/MSYS2-packages/MSYS2-packages/*.zst --noconfirm"

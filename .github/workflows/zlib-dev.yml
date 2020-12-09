@@ -20,7 +20,6 @@ jobs:
     - name: Prepare
       run: |
         git config --global core.autocrlf false
-        C:\msys64\usr\bin\bash -lc "sed -i 's/-O2/-O3 -flto/g' /etc/makepkg.conf"
     - uses: actions/checkout@v2
     - name: Build
       run: |
