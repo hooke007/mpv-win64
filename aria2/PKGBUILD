@@ -2,32 +2,15 @@
 pkgname=aria2
 pkgver=1.35.0
 pkgrel=1
-pkgdesc="A multi-protocol & multi-source, cross platform download utility"
-_zlibver=1.2.11
+pkgdesc='Download utility that supports HTTP(S), FTP, BitTorrent, and Metalink'
 arch=('x86_64')
-url="https://aria2.github.io/"
+url='http://aria2.sourceforge.net/'
 license=('GPL2')
-source=("https://zlib.net/current/zlib-$_zlibver.tar.gz"
-        "https://github.com/aria2/aria2/releases/download/release-$pkgver/aria2-$pkgver.tar.xz")
-md5sums=('SKIP' 'SKIP')
+source=("https://github.com/aria2/aria2/releases/download/release-$pkgver/aria2-$pkgver.tar.xz")
+md5sums=('SKIP')
 
 build() {
-  TMP="${srcdir}/tmp"
-  mkdir -p ${TMP}
-  FLAGS="-O3 -pipe -ffat-lto-objects"
-  export CFLAGS=${FLAGS}
-  export CXXFLAGS=${FLAGS}
-  export CPPLAGS="-I${TMP}/include"
-  export LDFLAGS="-L${TMP}/lib ${LDFLAGS}"
-  export PKG_CONFIG_PATH=${TMP}/lib/pkgconfig
-
-  cd "${srcdir}/zlib-$_zlibver/"
-  CC=gcc ./configure --prefix=${TMP} --static
-  make install
-}
-
-package() {
-  cd "${srcdir}/aria2-$pkgver/"
+  cd $srcdir/aria2-$pkgver
   patch -p1 -i ../../aria2.patch
   # autoreconf -ifv
   ./configure \
@@ -43,6 +26,10 @@ package() {
     --disable-metalink \
     ARIA2_STATIC=yes
   make
-  mkdir -p ${pkgdir}/usr/bin
-  mv src/aria2c.exe ${pkgdir}/usr/bin/
+}
+
+package() {
+  cd $srcdir/aria2-$pkgver
+  mkdir -p $pkgdir/opt/bin
+  mv src/aria2c.exe $pkgdir/opt/bin
 }
