@@ -20,8 +20,7 @@ jobs:
     - name: Prepare
       run: |
         git config --global core.autocrlf false
-        C:\msys64\usr\bin\bash -lc "sed 's/-O2/-O3 -flto/g' /etc/makepkg.conf"
-        C:\msys64\usr\bin\bash -lc "sed 's/.tar.zst/.tar.xz/' /etc/makepkg.conf"
+        C:\msys64\usr\bin\bash -lc "sed -i 's/-O2/-O3 -flto/g' /etc/makepkg.conf"
     - uses: actions/checkout@v2
     - name: Build
       run: |
@@ -30,7 +29,7 @@ jobs:
       uses: svenstaro/upload-release-action@v2
       with:
         repo_token: ${{ secrets.GITHUB_TOKEN }}
-        file: zlib-dev/*.xz
+        file: zlib-dev/zlib*
         tag: dev
         overwrite: true
         file_glob: true
